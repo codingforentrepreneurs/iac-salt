@@ -1,0 +1,19 @@
+name: Run SaltStack via SSH
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  run_ssh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: execute a remote ssh command
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: cd ~/iac-salt && git pull && salt "*" state.apply
